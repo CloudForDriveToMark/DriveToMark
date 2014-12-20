@@ -17,6 +17,8 @@ public class Advertisement {
 	private String time;
 	private double latitute;
 	private double longitude;
+	private double destLat;
+	private double destLng;
 	
 	public Advertisement(String userName, String carModel, String capacity, String required,
 			String charge,String startStAdd,String startCity,String startZip,
@@ -39,6 +41,26 @@ public class Advertisement {
 	}
 	
 	
+	public double getDestLat() {
+		return destLat;
+	}
+
+
+	public void setDestLat(double destLat) {
+		this.destLat = destLat;
+	}
+
+
+	public double getDestLng() {
+		return destLng;
+	}
+
+
+	public void setDestLng(double destLng) {
+		this.destLng = destLng;
+	}
+
+
 	public double getLatitute() {
 		return latitute;
 	}

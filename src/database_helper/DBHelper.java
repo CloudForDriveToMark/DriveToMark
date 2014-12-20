@@ -92,12 +92,16 @@ public class DBHelper {
 		//calculate lat and long
 		double latitude = 0;
 		double longitude = 0;
+		double destLat = 0;
+		double destLng = 0;
 		AddressConverter converter = new AddressConverter();
 		try {
-			GoogleResponse res = converter.convertToLatLong(advertisement.getStartStAdd()+" "+
+			GoogleResponse resStart = converter.convertToLatLong(advertisement.getStartStAdd()+" "+
 					advertisement.getStartCity()+" "+advertisement.getStartZip());
-			if (res.getStatus().equals("OK")) {
-				for (Result result : res.getResults()) {
+			GoogleResponse resDest = converter.convertToLatLong(advertisement.getDestination()+" "+
+					advertisement.getDestinationZip());
+			if (resStart.getStatus().equals("OK")) {
+				for (Result result : resStart.getResults()) {
 
 					latitude = Double.parseDouble(result.getGeometry().getLocation()
 							.getLat());
@@ -111,7 +115,24 @@ public class DBHelper {
 							+ result.getGeometry().getLocation_type());
 				}
 			} else {
-				System.out.println(res.getStatus());
+				System.out.println(resStart.getStatus());
+			}
+			if (resDest.getStatus().equals("OK")) {
+				for (Result result : resDest.getResults()) {
+
+					destLat = Double.parseDouble(result.getGeometry().getLocation()
+							.getLat());
+					destLng = Double.parseDouble(result.getGeometry().getLocation()
+							.getLng());
+					System.out.println("Lattitude of address is :"
+							+ result.getGeometry().getLocation().getLat());
+					System.out.println("Longitude of address is :"
+							+ result.getGeometry().getLocation().getLng());
+					System.out.println("Location is "
+							+ result.getGeometry().getLocation_type());
+				}
+			} else {
+				System.out.println(resDest.getStatus());
 			}
 			
 		} catch (IOException e1) {
@@ -120,7 +141,7 @@ public class DBHelper {
 		}
 
 		try{
-		PreparedStatement ps=conn.prepareStatement("insert into advertise_car values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+		PreparedStatement ps=conn.prepareStatement("insert into advertise_car values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 		ps.setString(1,null);
 		ps.setString(2,advertisement.getUserName());
 		ps.setString(3,advertisement.getCarModel());
@@ -137,6 +158,8 @@ public class DBHelper {
 		ps.setString(14,advertisement.getTime());
 		ps.setDouble(15,latitude);
 		ps.setDouble(16,longitude);
+		ps.setDouble(17,destLat);
+		ps.setDouble(18,destLng);
 		
 		t=ps.executeUpdate();
 		}catch(SQLException e){
@@ -180,6 +203,9 @@ public class DBHelper {
 				advertisement.setTime(rs.getString("time"));
 				advertisement.setLatitute(rs.getDouble("latitude"));
 				advertisement.setLongitude(rs.getDouble("longitude"));
+				advertisement.setDestLat(rs.getDouble("destLat"));
+				advertisement.setDestLng(rs.getDouble("destLng"));
+				System.out.println("destination long lat are : "+advertisement.getDestLat()+" "+advertisement.getDestLng());
 				advertisementList.add(advertisement);
 				
 				

@@ -33,11 +33,15 @@ System.out.println("got array of advertisement");
 String[] lableIndex = new String[advertisement.length];
 Double[] lat = new Double[advertisement.length]; 
 Double[] lng = new Double[advertisement.length]; 
+Double[] destLat = new Double[advertisement.length]; 
+Double[] destLng = new Double[advertisement.length]; 
 String[] destinationString = new String[advertisement.length];
 String[] destinationZipString =  new String[advertisement.length];
 for(int j = 0;j<advertisement.length;j++){
 	lat[j] = advertisement[j].getLatitute();
 	lng[j] = advertisement[j].getLongitude();
+	destLat[j] = advertisement[j].getDestLat();
+	destLng[j] = advertisement[j].getDestLng();
 	destinationString[j] = advertisement[j].getDestination();
 	destinationZipString[j] = advertisement[j].getDestinationZip();
 	lableIndex[j] = String.valueOf(j+1);
@@ -56,6 +60,8 @@ System.out.println("got array lat and long");
 	
 	var jsLatArray = new Array();
 	var jsLngArray = new Array();
+	var jsDestLatArray = new Array();
+	var jsDestLngArray = new Array();
 	var destination = [];
 	var lableIndexJs = [];
 	var destination_zip = new Array();
@@ -64,6 +70,8 @@ System.out.println("got array lat and long");
 	var y = 0;
 	var z = 0;
 	var w = 0;
+	var r = 0;
+	var s = 0;
 	<% for(Double element:lat){
 		System.out.println("getting something in lar");
 	%> jsLatArray[x] = <%=element %>
@@ -75,6 +83,16 @@ System.out.println("got array lat and long");
 		%> jsLngArray[y] = <%=lgnElement %>
 		y=y+1;
 		<% } %>
+		
+		<% for(Double eachDestLat:destLat){
+			%> jsDestLatArray[r] = <%=eachDestLat %>
+			r=r+1;
+			<% } %>
+			
+			<% for(Double eachDestLng:destLng){
+				%> jsDestLngArray[s] = <%=eachDestLng %>
+				s=s+1;
+				<% } %>
 		
 		alert("before assigment");
 		<% for(String eachDestination:destinationString){
@@ -89,9 +107,9 @@ System.out.println("got array lat and long");
 				%> lableIndexJs[w] = "<%=label %>"
 				w=w+1;
 				<% } %>	
-		alert("after assigmnt");
+		
 		               var map = new google.maps.Map(document.getElementById('map_canvas'), {
-		                 zoom: 3,
+		                 zoom: 8,
 		                 center: new google.maps.LatLng(40, -74),
 		                 mapTypeId: google.maps.MapTypeId.ROADMAP
 		               });
@@ -101,8 +119,7 @@ System.out.println("got array lat and long");
 		               var marker, i;
 
 		               for (i = 0; i < jsLatArray.length; i++) {  
-		            	   
-		            	   
+		            	  
 		                 marker = new MarkerWithLabel({
 		                   position: new google.maps.LatLng(jsLatArray[i], jsLngArray[i]),
 		                   title: destination[i],
@@ -116,9 +133,33 @@ System.out.println("got array lat and long");
 		                 google.maps.event.addListener(marker, 'click', (function(marker, i) {
 		                   return function() {
 		                     
-		                     infowindow.open(map, marker);
+		                	   map.setZoom(8);
+		                	   marker = new MarkerWithLabel({
+				                   position: new google.maps.LatLng(jsDestLatArray[i], jsDestLngArray[i]),
+				                   map: map,
+				                   labelContent: lableIndexJs[i],
+				                   labelAnchor: new google.maps.Point(22, 0),
+				                   labelClass: "labels", // the CSS class for the label
+				                   labelStyle: {opacity: 0.75}
+				                 });
+		                	   
+		                	   var flightPlanCoordinates = [
+		                	                                new google.maps.LatLng(jsLatArray[i], jsLngArray[i]),
+		                	                                new google.maps.LatLng(jsDestLatArray[i], jsDestLngArray[i])
+		                	                                ]
+		                	   var flightPath = new google.maps.Polyline({
+		                		    path: flightPlanCoordinates,
+		                		    geodesic: true,
+		                		    strokeColor: '#FF0000',
+		                		    strokeOpacity: 1.0,
+		                		    strokeWeight: 2
+		                		  });
+		                	   flightPath.setMap(map);
 		                   }
+		                   
 		                 })(marker, i));
+		                 
+		                
 		                 
 		               }
 		               
@@ -128,7 +169,7 @@ System.out.println("got array lat and long");
 </script>
 <% int counter = 0; %>
 
-   <div id="map_canvas" style="width:400px;height:400px;">Google Map</div> 
+   <div id="map_canvas" style="width:800px;height:500px;">Google Map</div> 
    <table class="table table-striped">
    <caption>Trips in your area</caption>
    <thead>
