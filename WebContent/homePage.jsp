@@ -28,9 +28,21 @@
         <div class="checkbox">
           <label><input type="checkbox"> Remember me</label>
         </div>
+        <% String status= request.getParameter("status");
+        if( status != null){
+         	if( status.equals("emptyFields"))
+       		{ %>
+        		<font size="3" color="red">Fields Cannot be Left Empty</font>
+        	<%}
+        	else if(status.equals("invalidInput"))
+        	{%>
+        		<font size="3" color="red">Incorrect UserName or Password</font>
+        	<% }
+        }%>
         <button type="submit" class="btn btn-default" name="submit" value="login">login</button>
         <h3>New User? Sign Up Here</h3>
         <button type="submit" class="btn btn-default" name="submit" value="signup">signup</button>
+        
       </form>
     </div>
 </html>
