@@ -15,6 +15,7 @@ import com.user.Result;
 
 import models.Advertisement;
 import models.Employee;
+import models.Request;
 
 public class DBHelper {
 
@@ -425,4 +426,109 @@ public class DBHelper {
 		return latLong;
 
 	}
+
+	public ArrayList<Employee> populateEmployeeArray(
+			Connection conn,Advertisement[] advertiseArray) {
+		// TODO Auto-generated method stub
+		Statement st;
+		ArrayList<Employee> employeeList = new ArrayList<Employee>();
+
+		try {
+			for(int i = 0; i< advertiseArray.length ; i++){
+				String query = "select * from employee where username='" + advertiseArray[i].getUserName()+ "'";
+				System.out.println(query);
+				st = conn.createStatement();
+				ResultSet rs = st.executeQuery(query);
+				if(rs.next()){
+					Employee employee = new Employee();
+					employee.setName(rs.getString("name"));
+					employee.setUserName(rs.getString("username"));
+					employee.setContact(rs.getString("contact"));
+					employeeList.add(employee);
+				}
+			}
+			
+			}catch(SQLException e){
+				e.printStackTrace();
+			}
+	
+		return employeeList;
+	}
+
+	public int insertRequest(Connection conn, String requester,
+			String employeeToContactEmail, long currentTimeMillis) {
+		// TODO Auto-generated method stub
+		int t = 0;
+		try {
+			PreparedStatement ps = conn
+					.prepareStatement("insert into car_request values(?,?,?,?,?)");
+			
+			ps.setString(1, requester);
+			ps.setString(2, employeeToContactEmail);
+			ps.setString(3, String.valueOf(currentTimeMillis));
+			ps.setString(4, "0");
+			ps.setString(5, "no");
+			t = ps.executeUpdate();
+			System.out.println("request inserted into database");
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		return t;
+		
+	}
+
+	public ArrayList<Request> populateRequestReceivedByUser(Connection conn, String userName) {
+		// TODO Auto-generated method stub
+		Statement st;
+		ArrayList<Request> requestReceivedList = new ArrayList<Request>();
+
+		try {
+			String query = "select * from car_request where advertiser='" +userName+ "'";
+			System.out.println(query);
+			st = conn.createStatement();
+			ResultSet rs = st.executeQuery(query);
+			while(rs.next()){
+				Request request = new Request();
+				request.setRequester(rs.getString("requester"));
+				request.setApprover(rs.getString("advertiser"));
+				request.setApproved(rs.getString("isapproved"));
+				request.setRequestTime(Long.parseLong(rs.getString("request_timestamp")));
+				requestReceivedList.add(request);
+			}
+			
+		}catch(SQLException e){
+				e.printStackTrace();
+		}
+	
+		return requestReceivedList;
+	}
+	
+	public ArrayList<Request> populateRequestSentByUser(Connection conn, String userName) {
+		// TODO Auto-generated method stub
+		Statement st;
+		ArrayList<Request> requestReceivedList = new ArrayList<Request>();
+
+		try {
+			String query = "select * from car_request where requester='" +userName+ "'";
+			System.out.println(query);
+			st = conn.createStatement();
+			ResultSet rs = st.executeQuery(query);
+			while(rs.next()){
+				Request request = new Request();
+				request.setRequester(rs.getString("requester"));
+				request.setApprover(rs.getString("advertiser"));
+				request.setApproved(rs.getString("isapproved"));
+				request.setRequestTime(Long.parseLong(rs.getString("request_timestamp")));
+				requestReceivedList.add(request);
+			}
+			
+		}catch(SQLException e){
+				e.printStackTrace();
+		}
+	
+		return requestReceivedList;
+	}
+		
+		
+	
 }

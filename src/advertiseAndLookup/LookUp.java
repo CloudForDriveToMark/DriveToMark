@@ -77,7 +77,11 @@ public class LookUp extends HttpServlet {
 				int size = advertisementResult.size();
 				Advertisement[] advertiseArray =  new Advertisement[size];
 				advertiseArray = advertisementResult.toArray(advertiseArray);
+				Employee[] employeeArray = new Employee[size];
+				ArrayList<Employee> employeeResult =  db.populateEmployeeArray(conn,advertiseArray);
+				employeeArray = employeeResult.toArray(employeeArray);
 				request.getSession().setAttribute("advertisementArray", advertiseArray);
+				request.getSession().setAttribute("employeeArray", employeeArray);
 				rd = request.getRequestDispatcher("lookUpResult.jsp");
 				rd.forward(request, response);
 			}else{

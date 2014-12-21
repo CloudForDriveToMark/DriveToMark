@@ -79,4 +79,24 @@
     <servlet-name>LookUp</servlet-name>
     <url-pattern>/LookUp</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>detailedAdvertisement</display-name>
+    <servlet-name>detailedAdvertisement</servlet-name>
+    <servlet-class>advertiseAndLookup.detailedAdvertisement</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>detailedAdvertisement</servlet-name>
+    <url-pattern>/detailedAdvertisement</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>DetailedAdvertisement</display-name>
+    <servlet-name>DetailedAdvertisement</servlet-name>
+    <servlet-class>advertiseAndLookup.DetailedAdvertisement</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DetailedAdvertisement</servlet-name>
+    <url-pattern>/DetailedAdvertisement</url-pattern>
+  </servlet-mapping>
 </web-app>

@@ -189,11 +189,12 @@
    </thead>
    <tbody>
    <% if(advertisement.length>0){ 
-      for(int i = 0;i<advertisement.length ; i++) { %>
+      for(int i = 0;i<advertisement.length ; i++) { 
+     %>
       <tr>
-         <td><a href ="#"><% out.print(i+1); %></a></td>
-         <td><a href ="#"><% out.print(advertisement[i].getStartCity()); %></a></td>
-         <td><a href ="#"><% out.print(advertisement[i].getDestination()); %></a></td>
+         <td><a href =<%= "\"detailedAdvertisement.jsp?Id=" + i + "\"" %> ><% out.print(i+1); %></a></td>
+         <td><% out.print(advertisement[i].getStartCity()); %></td>
+         <td><% out.print(advertisement[i].getDestination()); %></td>
          <td><% out.print(advertisement[i].getDate()); %></td>
          <td><% out.print(advertisement[i].getTime()); %></td>
          <td><% out.print(advertisement[i].getRequired()); %></td>

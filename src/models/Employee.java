@@ -24,6 +24,9 @@ public class Employee {
 		this.country = country;
 		this.zipCode = zipCode;
 	}
+	public Employee() {
+		// TODO Auto-generated constructor stub
+	}
 	public String getUserName() {
 		return userName;
 	}
