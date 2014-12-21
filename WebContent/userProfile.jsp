@@ -20,7 +20,13 @@
 <div class="container">
       <h1>Welcome <% 
       System.out.println("hi "+ request.getSession().getAttribute("name") );
-      out.print(request.getSession().getAttribute("name")); %></h1>
+      out.print(request.getSession().getAttribute("name"));
+      %></h1>
+      <%String advParam = request.getParameter("adv");
+      if( advParam != null && advParam.equals("y"))
+      {%>
+    	<h2>Advertisement Created Successfully</h2>  
+     <% } %>
       <h2>What would you like you do today?</h2>
       <form role="form" method="post" action="UserProfile">
         <button type="submit" class="btn btn-primary" name="submit" value="advertise">Advertise Cars</button><br><br>
