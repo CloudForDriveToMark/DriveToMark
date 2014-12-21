@@ -44,29 +44,48 @@ public class LookUp extends HttpServlet {
 		RequestDispatcher rd = null;
 		DBHelper db = new DBHelper();
 		Connection conn = db.dbConnect();
-		String startCity = request.getParameter("city");
-		String startZip = request.getParameter("zipStart");
-		String people = request.getParameter("people");
-		String officeAdd = request.getParameter("officeAdd");
-		String officeZip = request.getParameter("officeZip");
-		String distance = request.getParameter("distance");
-		System.out.println("distance selected is "+ distance);
-		ArrayList<Advertisement> advertisementResult = db.lookUp(conn, startCity,startZip,people,officeAdd,officeAdd,officeZip);
+		int people = 0;
+		int distance = 0;
+		String startAddress = null;
+		String startZip = null;
+		String destinationAddress = null;
 		
-		//set employee object for signup completion
-		
-		if(advertisementResult!=null){
-			System.out.println("here are lookup results successfull");
-			int size = advertisementResult.size();
-			Advertisement[] advertiseArray =  new Advertisement[size];
-			advertiseArray = advertisementResult.toArray(advertiseArray);
-			request.getSession().setAttribute("advertisementArray", advertiseArray);
-			rd = request.getRequestDispatcher("lookUpResult.jsp");
-			rd.include(request, response);
-		}else{
-			rd = request.getRequestDispatcher("errorSignUp.jsp");
-			rd.include(request, response);
+		//load default map from user's city if it is from direct user profile
+		if (request.getParameter("submit").equals("filter")) {
+			// check which filters are applied
+			if(request.getParameter("startAddress")!=null){
+				startAddress = request.getParameter("startAddress");
+			}
+			if(request.getParameter("startZip")!=null){
+				startZip = request.getParameter("startZip");
+			}
+			if(request.getParameter("destinationAddress")!=null){
+				destinationAddress = request.getParameter("destinationAddress");
+			}
+			people = Integer.parseInt(request.getParameter("people"));
+			distance = Integer.parseInt(request.getParameter("distance"));
+			System.out.println("distance selected is " + distance);
+			System.out.println("caling lookup filter");
+			ArrayList<Advertisement> advertisementResult = db.lookUpWithFilter(
+					conn, request.getSession().getAttribute("userName")
+							.toString(), people, distance,startAddress,startZip,destinationAddress);
+
+			// set employee object for signup completion
+			
+			if(advertisementResult!=null){
+				System.out.println("here are lookup results successfull");
+				int size = advertisementResult.size();
+				Advertisement[] advertiseArray =  new Advertisement[size];
+				advertiseArray = advertisementResult.toArray(advertiseArray);
+				request.getSession().setAttribute("advertisementArray", advertiseArray);
+				rd = request.getRequestDispatcher("lookUpResult.jsp");
+				rd.forward(request, response);
+			}else{
+				rd = request.getRequestDispatcher("errorSignUp.jsp");
+				rd.forward(request, response);
+			}
 		}
+		
 		
 	}
 	}

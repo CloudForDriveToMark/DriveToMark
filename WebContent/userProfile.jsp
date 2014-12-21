@@ -16,7 +16,7 @@
 
 </head>
 <body>
-<jsp:include page="indexPage.jsp"/>
+
 <div class="container">
       <h1>Welcome <% 
       System.out.println("hi "+ request.getSession().getAttribute("name") );

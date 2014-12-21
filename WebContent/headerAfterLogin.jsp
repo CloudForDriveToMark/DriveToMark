@@ -27,10 +27,11 @@
 <div class="container">
         <div class="container">
         <ul class="nav nav-tabs">
-        <li><a href="indexPage.jsp?sec=aboutUs">About Us</a></li>
-        <li><a href="indexPage.jsp?sec=login">login</a></li>
-        <li><a href="indexPage.jsp?sec=contactUs">Contact Us</a></li>
-        <li><a href="indexPage.jsp?sec=news">News Letter</a></li>
+        <li><a href="profileIndexAfterLogin.jsp?sec=aboutUs">About Us</a></li>
+        <li><a href="profileIndexAfterLogin.jsp?sec=home">Home</a></li>
+        <li><a href="profileIndexAfterLogin.jsp?sec=contactUs">Contact Us</a></li>
+        <li><a href="profileIndexAfterLogin.jsp?sec=news">News Letter</a></li>
+        <li><a href="profileIndexAfterLogin.jsp?sec=logOut">Logout</a></li>
       </ul>
 </div>
 </div>
