@@ -28,7 +28,7 @@
         <div class="container">
         <ul class="nav nav-tabs">
         <li><a href="indexPage.jsp?sec=aboutUs">About Us</a></li>
-        <li><a href="indexPage.jsp?sec=login">login</a></li>
+        <li><a href="indexPage.jsp?sec=home">Home</a></li>
         <li><a href="indexPage.jsp?sec=contactUs">Contact Us</a></li>
         <li><a href="indexPage.jsp?sec=news">News Letter</a></li>
       </ul>
@@ -49,6 +49,7 @@
           <div class="container">
             <div class="carousel-caption">
               <h1>Welcome to Drive to mark.....</h1>
+              <p><a class="btn btn-lg btn-primary" href="newSignUp.jsp" role="button">Sign up today</a></p>
             </div>
           </div>
         </div>

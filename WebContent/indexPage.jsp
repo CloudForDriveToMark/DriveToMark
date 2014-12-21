@@ -10,22 +10,19 @@
 <jsp:include page="Header.jsp"/>
 <%
 			Object obj = request.getParameter("sec");
-			if (obj != null ) {
-				String section = obj.toString();
-				if (section.equals("aboutUs")) {
+			if (obj != null) {
+				String sec = obj.toString();
+				if (sec.equals("aboutUs")) {
 					%> <jsp:include page="aboutUs.jsp" /> <%
-				} else if (section.equals("login") || section.equals("logOut")) {
-					%> <jsp:include page="login.jsp" /> <%
-				} else if (section.equals("contactUs")) {
+				} else if (sec.equals("home")) {
+					%> <jsp:include page="homePage.jsp" /> <%
+				} else if (sec.equals("contactUs")) {
 					%> <jsp:include page="contactUs.jsp" /> <%
-				} else if (section.equals("newsLetter")) {
+				} else if (sec.equals("newsLetter")) {
 					%> <jsp:include page="newsLetter.jsp" /> <%
 				}
-			}else{ %>
-			<jsp:include page="login.jsp" />
-		<% }
-			%>
-				
+			}
+				%>
  	
 </body>
 </html>

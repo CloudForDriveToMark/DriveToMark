@@ -16,7 +16,7 @@
 
 </head>
 <body>
-<jsp:include page="headerAfterLogin.jsp"/>
+<jsp:include page="indexPage.jsp"/>
 <div class="container">
       <h2>Welcome to MarkToDrive!!!!!!</h2>
       <form role="form" method="post" action="Advertise">

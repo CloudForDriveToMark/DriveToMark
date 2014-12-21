@@ -58,7 +58,7 @@ public class Welcome extends HttpServlet {
 				System.out.println("user validated. name is "+ name);
 				request.getSession().setAttribute("name", name);
 				request.getSession().setAttribute("userName",userName);
-				RequestDispatcher rd = request.getRequestDispatcher("profileIndexAfterLogin.jsp");
+				RequestDispatcher rd = request.getRequestDispatcher("userProfile.jsp");
 				rd.forward(request, response);
 			}else{
 				
