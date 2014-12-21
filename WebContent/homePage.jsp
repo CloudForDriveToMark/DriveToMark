@@ -28,6 +28,14 @@
         <div class="checkbox">
           <label><input type="checkbox"> Remember me</label>
         </div>
+        <%if(request.getParameter("status") != null); 
+        {%>
+        	<div class="form-group">
+            
+            <font size="3" color="red">Fields cannot be empty</font>
+          </div>
+        	 
+       <%  }%>
         <button type="submit" class="btn btn-default" name="submit" value="login">login</button>
         <h3>New User? Sign Up Here</h3>
         <button type="submit" class="btn btn-default" name="submit" value="signup">signup</button>
