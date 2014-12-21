@@ -48,29 +48,37 @@ public class Welcome extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		if(request.getParameter("submit").equals("login")){
+		System.out.println("login called");
+		if(request.getParameter("submit").equals("login"))
+		{
 			System.out.println("login called");
 			String userName = request.getParameter("userName");
 			String password = request.getParameter("password");
+			if(userName == null || password == null)
+			{
+				response.sendRedirect("homePage.jsp?status=emptyFields");
+			}
 			System.out.println(userName);
 			String name = db.authenticateUser(conn,userName,password);
-			if(!name.equals("")){
+			if(!name.equals(""))
+			{
 				System.out.println("user validated. name is "+ name);
 				request.getSession().setAttribute("name", name);
 				request.getSession().setAttribute("userName",userName);
 				RequestDispatcher rd = request.getRequestDispatcher("userProfile.jsp");
 				rd.forward(request, response);
-			}else{
-				
-				//RequestDispatcher rd = request.getRequestDispatcher("indexPage.jsp");
-				//rd.include(request, response);
-				response.sendRedirect("errorLogin.jsp");
 			}
-		}else if(request.getParameter("submit").equals("signup")){
+			else
+			{
+				response.sendRedirect("homePage.jsp?status=invalidInput");
+			}
+		}
+		else if(request.getParameter("submit").equals("signup")){
 			System.out.println("signup called");
 			RequestDispatcher rd = request.getRequestDispatcher("newSignUp.jsp");
 			rd.forward(request, response);
 		}
+		
 	}
 
 }
