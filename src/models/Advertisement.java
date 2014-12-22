@@ -2,6 +2,7 @@ package models;
 
 public class Advertisement {
 
+	private int advertisementId;
 	private String userName;
 	private String carModel;
 	private int capacity;
@@ -41,6 +42,16 @@ public class Advertisement {
 	}
 	
 	
+	public int getAdvertisementId() {
+		return advertisementId;
+	}
+
+
+	public void setAdvertisementId(int advertisementId) {
+		this.advertisementId = advertisementId;
+	}
+
+
 	public double getDestLat() {
 		return destLat;
 	}

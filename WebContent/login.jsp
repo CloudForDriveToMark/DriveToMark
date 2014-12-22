@@ -16,6 +16,17 @@
 </head>
 <div class="container">
       <h2>Welcome to MarkToDrive!!!!!!</h2>
+      <% String status= request.getParameter("status");
+        if( status != null){
+         	if( status.equals("emptyFields"))
+       		{ %>
+        		<font size="3" color="red">Fields Cannot be Left Empty</font>
+        	<%}
+        	else if(status.equals("invalidInput"))
+        	{ %>
+        		<font size="3" color="red">Incorrect UserName or Password</font>
+        	<% }
+        }%>
       <form role="form" method="post" action="Welcome">
         <div class="form-group">
           <label for="userName">User Name:</label>
@@ -28,6 +39,7 @@
         <div class="checkbox">
           <label><input type="checkbox"> Remember me</label>
         </div>
+        
         <button type="submit" class="btn btn-default" name="submit" value="login">login</button>
         <h3>New User? Sign Up Here</h3>
         <button type="submit" class="btn btn-default" name="submit" value="signup">signup</button>

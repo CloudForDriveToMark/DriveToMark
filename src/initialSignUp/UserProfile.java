@@ -48,6 +48,26 @@ public class UserProfile extends HttpServlet {
 		RequestDispatcher rd = null;
 		DBHelper db = new DBHelper();
 		Connection conn = db.dbConnect();
+
+		// set user status
+		Request[] requestReceiveArray, requestSentArray = null;
+		ArrayList<Request> requestReceived = db.populateRequestReceivedByUser(
+				conn, request.getSession().getAttribute("userName").toString());
+		ArrayList<Request> requestSent = db.populateRequestSentByUser(conn,
+				request.getSession().getAttribute("userName").toString());
+		if (requestReceived != null) {
+			requestReceiveArray = new Request[requestReceived.size()];
+			requestReceiveArray = requestReceived.toArray(requestReceiveArray);
+			request.getSession().setAttribute("requestReceiveArray",
+					requestReceiveArray);
+		}
+		if (requestSent != null) {
+			requestSentArray = new Request[requestSent.size()];
+			requestSentArray = requestSent.toArray(requestSentArray);
+			request.getSession().setAttribute("requestSentArray",
+					requestSentArray);
+		}
+
 		if (request.getParameter("submit").equals("advertise")) {
 			System.out.println("advertise called");
 			rd = request.getRequestDispatcher("advertise.jsp");
@@ -56,21 +76,18 @@ public class UserProfile extends HttpServlet {
 
 			ArrayList<Advertisement> advertisementResult = db.lookUpDefault(
 					conn, request.getSession().getAttribute("userName")
-					.toString());
+							.toString());
 
 			// set employee object for signup completion
-
 			if (advertisementResult != null) {
 				System.out.println("here are lookup results successfull");
 				int size = advertisementResult.size();
 				Advertisement[] advertiseArray = new Advertisement[size];
 				Employee[] employeeArray = new Employee[size];
 				advertiseArray = advertisementResult.toArray(advertiseArray);
-				ArrayList<Employee> employeeResult = db.populateEmployeeArray(
-						conn, advertiseArray);
+				ArrayList<Employee> employeeResult = db.populateEmployeeArray(conn, advertiseArray);
 				employeeArray = employeeResult.toArray(employeeArray);
-				request.getSession().setAttribute("advertisementArray",
-						advertiseArray);
+				request.getSession().setAttribute("advertisementArray",advertiseArray);
 				request.getSession().setAttribute("employeeArray",
 						employeeArray);
 				rd = request.getRequestDispatcher("lookUpResult.jsp");
@@ -82,22 +99,6 @@ public class UserProfile extends HttpServlet {
 
 		} else if (request.getParameter("submit").equals("viewStatus")) {
 			System.out.println("viewStatus called");
-			Request[] requestReceiveArray,requestSentArray = null;
-			ArrayList<Request> requestReceived = db.populateRequestReceivedByUser(conn,request.getSession().getAttribute("userName")
-					.toString());
-			ArrayList<Request> requestSent = db.populateRequestSentByUser(conn,request.getSession().getAttribute("userName")
-					.toString());
-			if(requestReceived!=null){
-				requestReceiveArray = new Request[requestReceived.size()];
-				requestReceiveArray = requestReceived.toArray(requestReceiveArray);
-				request.getSession().setAttribute("requestReceiveArray",requestReceiveArray);
-			}
-			if(requestSent!=null){
-				requestSentArray = new Request[requestSent.size()];
-				requestSentArray = requestSent.toArray(requestSentArray);
-				request.getSession().setAttribute("requestSentArray",requestSentArray);
-			}
-			
 			rd = request.getRequestDispatcher("viewStatus.jsp");
 			rd.forward(request, response);
 		}

@@ -2,11 +2,15 @@ package advertiseAndLookup;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.util.ArrayList;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import models.Request;
 
 import com.amazonaws.auth.PropertiesCredentials;
 import com.amazonaws.regions.Region;
@@ -46,6 +50,7 @@ public class DetailedAdvertisement extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		RequestDispatcher rd = null;
 		int successfulRequestInsertInDb = 0;
 		DBHelper db = new DBHelper();
 		Connection conn = db.dbConnect();
@@ -56,12 +61,35 @@ public class DetailedAdvertisement extends HttpServlet {
 		System.out.println("we are going to email "+ employeeToContactEmail + " by Amazon SNS");
 		subscribeClientandPublish(employeeToContactEmail,messageToPublish);
 		
+		//get number of seats required by requester
+		String seatsRequested = request.getParameter("seatsNeed");
+		request.getSession().setAttribute("seatsRequested", Integer.parseInt(seatsRequested)); 
 		//save request details in database
-		successfulRequestInsertInDb = db.insertRequest(conn, requester, employeeToContactEmail, System.currentTimeMillis() );
+		int advertisementId = Integer.parseInt(request.getSession().getAttribute("advertiseId").toString());
+		successfulRequestInsertInDb = db.insertRequest(conn, requester, employeeToContactEmail, System.currentTimeMillis(),advertisementId,Integer.parseInt(seatsRequested));
 		if(successfulRequestInsertInDb ==0 ){
 			System.out.println("User has already sent request to advertiser");
+			rd = request.getRequestDispatcher("viewStatus.jsp?status=alreadyRequested");
+			rd.forward(request,response);
+			
 		}else{
+			
 			System.out.println("Request inserted successfully");
+			//update requestArrays
+			ArrayList<Request> requestRecvList = db.populateRequestReceivedByUser(conn, requester);
+			int size = requestRecvList.size();
+			Request []requestReceived = new Request[size];
+			requestReceived = requestRecvList.toArray(requestReceived);
+			request.getSession().setAttribute("requestReceiveArray",requestReceived);
+			
+			ArrayList<Request> requestSentList = db.populateRequestSentByUser(conn, requester);
+			int sizeOfSent = requestSentList.size();
+			Request []requestSent = new Request[sizeOfSent];
+			requestSent = requestSentList.toArray(requestSent);
+			request.getSession().setAttribute("requestSentArray",requestSent);
+			System.out.println("everything is done inside detailed advertise. Going to call view status");
+			rd = request.getRequestDispatcher("viewStatus.jsp?status=requestSent");
+			rd.forward(request,response);
 		}
 		
 	}

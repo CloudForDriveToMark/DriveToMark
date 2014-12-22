@@ -64,10 +64,11 @@ public class Advertise extends HttpServlet {
 		
 		if(db.createAdvertisement(conn, advertisement)>0){
 			System.out.println("advertisement successfull");
-			rd = request.getRequestDispatcher("successAdvertise.jsp");
+			//rd = request.getRequestDispatcher("successAdvertise.jsp");
+			rd = request.getRequestDispatcher("profileIndexAfterLogin.jsp?adv=y");
 			rd.forward(request, response);
 		}else{
-			rd = request.getRequestDispatcher("errorAdvertise.jsp");
+			rd = request.getRequestDispatcher("profileIndexAfterLogin.jsp?adv=n");
 			rd.forward(request, response);
 		}
 	}

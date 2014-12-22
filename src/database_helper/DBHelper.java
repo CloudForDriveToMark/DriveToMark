@@ -231,7 +231,7 @@ public class DBHelper {
 
 		try {
 			String query = "select * from advertise_car a,employee e "
-					+ "where e.username='" + userName
+					+ "where a.required>0 and a.username<>e.username and e.username='" + userName
 					+ "' and a.start_zip=e.zipcode";
 
 			System.out.println(query);
@@ -241,6 +241,7 @@ public class DBHelper {
 			while (rs.next()) {
 				Advertisement advertisement = new Advertisement();
 				System.out.println("atleast getting some result while lookup");
+				advertisement.setAdvertisementId(rs.getInt("idadvertise_car"));
 				advertisement.setUserName(rs.getString("username"));
 				advertisement.setCharge(rs.getInt("price"));
 				advertisement.setCarModel(rs.getString("model"));
@@ -285,16 +286,18 @@ public class DBHelper {
 		double[] userLatLong = null;
 		// if user has specified startAddress as filter then find this address's
 		// latitude and longitude otherwise lookup with default home location
-		if (startZip != null && startAddress!=null) {
+		if (startAddress!=null) {
 			query = new StringBuilder(
-					"select * from advertise_car a where a.start_city= '"
-							+ startAddress + "'");
+					"select * from advertise_car a where a.required>0 and a.username <> '"+userName+"' and a.start_city like '%"
+							+ startAddress + "%'");
 			userLatLong = getLatLongFromAddess(conn, startAddress + startZip);
+			System.out.println("query in filter: "+query);
 		} else {
 			query = new StringBuilder(
-					"select * from advertise_car a,employee e where e.username='"
+					"select * from advertise_car a,employee e where a.username<>e.username and a.required>0 and e.username='"
 							+ userName + "' and a.start_zip=e.zipcode");
 			userLatLong = getLatLongFromUserName(conn, userName);
+			System.out.println("query in filter: "+query);
 		}
 
 		try {
@@ -313,6 +316,7 @@ public class DBHelper {
 			while (rs.next()) {
 				Advertisement advertisement = new Advertisement();
 				System.out.println("atleast getting some result while lookup");
+				advertisement.setAdvertisementId(rs.getInt("idadvertise_car"));
 				advertisement.setUserName(rs.getString("username"));
 				advertisement.setCharge(rs.getInt("price"));
 				advertisement.setCarModel(rs.getString("model"));
@@ -456,18 +460,20 @@ public class DBHelper {
 	}
 
 	public int insertRequest(Connection conn, String requester,
-			String employeeToContactEmail, long currentTimeMillis) {
+			String employeeToContactEmail, long currentTimeMillis,int advertisementId, int seatRequested) {
 		// TODO Auto-generated method stub
 		int t = 0;
 		try {
 			PreparedStatement ps = conn
-					.prepareStatement("insert into car_request values(?,?,?,?,?)");
+					.prepareStatement("insert into car_request values(?,?,?,?,?,?,?)");
 			
 			ps.setString(1, requester);
 			ps.setString(2, employeeToContactEmail);
 			ps.setString(3, String.valueOf(currentTimeMillis));
 			ps.setString(4, "0");
 			ps.setString(5, "no");
+			ps.setInt(6, advertisementId);
+			ps.setInt(7, seatRequested);
 			t = ps.executeUpdate();
 			System.out.println("request inserted into database");
 		}catch(SQLException e){
@@ -493,6 +499,8 @@ public class DBHelper {
 				request.setApprover(rs.getString("advertiser"));
 				request.setApproved(rs.getString("isapproved"));
 				request.setRequestTime(Long.parseLong(rs.getString("request_timestamp")));
+				request.setAdvertisementId(rs.getInt("advertisement_id"));
+				request.setNumberOfPeople(rs.getInt("seatRequested"));
 				requestReceivedList.add(request);
 			}
 			
@@ -519,6 +527,8 @@ public class DBHelper {
 				request.setApprover(rs.getString("advertiser"));
 				request.setApproved(rs.getString("isapproved"));
 				request.setRequestTime(Long.parseLong(rs.getString("request_timestamp")));
+				request.setAdvertisementId(rs.getInt("advertisement_id"));
+				request.setNumberOfPeople(rs.getInt("seatRequested"));
 				requestReceivedList.add(request);
 			}
 			
@@ -528,6 +538,67 @@ public class DBHelper {
 	
 		return requestReceivedList;
 	}
+
+	public int updateRequestInfo(Connection conn, String advertiser,String requester) {
+		// TODO Auto-generated method stub
+		Statement st;
+		int t = 0;
+		
+		try {
+			String query = "update car_request set isapproved='yes' where requester='" +requester+ "' and advertiser='" +advertiser+ "'";
+			System.out.println(query);
+			st = conn.createStatement();
+			t = st.executeUpdate(query);
+			
+			
+			}catch(SQLException e){
+				e.printStackTrace();
+			}
+		return t;
+	}
+
+	public int updateRequiredInAdvertisement(Connection conn,
+			int advertisementId, int numberOfPeople) {
+		// TODO Auto-generated method stub
+		Statement st;
+		int t = 0;
+		int required = getRequired(conn,advertisementId,numberOfPeople);
+		int newRequired = required - numberOfPeople;
+		try {
+			String query = "update advertise_car set required="+newRequired+" where idadvertise_car=" +advertisementId+"";
+			System.out.println(query);
+			st = conn.createStatement();
+			t = st.executeUpdate(query);
+			
+			
+			}catch(SQLException e){
+				e.printStackTrace();
+			}
+		return t;
+		
+	}
+
+	private int getRequired(Connection conn, int advertisementId, int numberOfPeople) {
+		// TODO Auto-generated method stub
+		Statement st;
+		int required = 0;
+		try {
+			String query = "select * from advertise_car where idadvertise_car='" +advertisementId+ "'";;
+			System.out.println(query);
+			st = conn.createStatement();
+			ResultSet rs = st.executeQuery(query);
+			if(rs.next()){
+				required=rs.getInt("required");		
+			}
+			}catch(SQLException e){
+				e.printStackTrace();
+			}
+		System.out.println("required from advertisement "+required);
+		return required;
+		
+	}
+
+	
 		
 		
 	

@@ -64,7 +64,7 @@ public class Welcome extends HttpServlet {
 				
 				//RequestDispatcher rd = request.getRequestDispatcher("indexPage.jsp");
 				//rd.include(request, response);
-				response.sendRedirect("errorLogin.jsp");
+				response.sendRedirect("indexPage.jsp?status=invalidInput");
 			}
 		}else if(request.getParameter("submit").equals("signup")){
 			System.out.println("signup called");

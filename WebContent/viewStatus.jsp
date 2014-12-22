@@ -22,34 +22,70 @@
 <jsp:include page="plainHeader.jsp"/>
 <div class="container">
       <h2>Details:</h2>
-      <form role="form" method="post" action="DetailedAdvertisement">
+      <form role="form" method="post" action="ViewStatus">
+      <% String status= request.getParameter("status");
+        if( status != null){
+         	if( status.equals("alreadyRequested"))
+       		{ %>
+        		<font size="3" color="red">You have already requested to this advertiser</font>
+        	<%}
+        	else if(status.equals("requestSent"))
+        	{ %>
+        		<font size="3" color="green">We have successfully sent your request to advertiser</font>
+        	<% }
+        }%>
         <% Request []requestReceived = (models.Request[])request.getSession().getAttribute("requestReceiveArray");
            Request []requestSent = (models.Request[])request.getSession().getAttribute("requestSentArray");
-           if(requestReceived!=null){ %>
+           
+           %>
+           <%if(requestReceived!=null && requestReceived.length>0 ){ %>
+           	   <h3>Requests Received by you</h3>	
         	   <table>
-               <tr> </tr>
+               <tr> 
+               	<th>Requester</th>
+               	<th>Seats Requested</th>
+               	<th>Approval Status</th>
+               	<th></th>
+               </tr>
+               
         	  	<%for(int i =0;i<requestReceived.length;i++){  %>
+        		  <tr>
+        			<td><% out.print(requestReceived[i].getRequester()); %></td>
+        			<td align="center"><% out.print(requestReceived[i].getNumberOfPeople()); %></td>
+        			<td align="center"><% out.print(requestReceived[i].isApproved()); %></td>
+        			<% if(requestReceived[i].isApproved().equals("no")){ %>
+        				<td><button type="submit" class="btn btn-primary" name="submit" value="approve<%=i %>">Approve</button></td>	
+        			<% }else{ %>
+        				<td><button type="submit" class="btn btn-primary" disabled="disabled" name="submit" value="approve<%=i %>">Approved</button></td>
+       				 <%} %>
+       			 </tr>
+       			 <% } %>
+        	  	</table>
+        	  <%} %> 
+     			
+     			 
+     			
+     			
+       	 <% if(requestSent!=null && requestSent.length>0){   
+       	 %><h3>Requests Sent by you</h3>	
+        	<table title="Requests sent by you">
+               <tr> 
+               	<th>Advertiser</th>
+               	<th>Approval Status</th>
+               	<th></th>
+               	<th></th>
+               	
+               </tr>
+        	  	<%for(int i =0;i<requestSent.length;i++){  %>
         		<tr>
-        		<td><h3><span class="label label-primary">recieved from:</span></h3></td>
-        		<td><h4><% out.print(requestReceived[i].getRequester()); %></h4></td>
-        		<td><h4><% out.print(requestReceived[i].isApproved()); %></h4></td>	
+        		<td><% out.print(requestSent[i].getApprover()); %></td>
+        		<td align="center"><% out.print(requestSent[i].isApproved()); %></td>
+        		
         		
        			 <%} %>
      			</table> <% } %>
-       	 <% if(requestSent!=null){
-        	  for(int i =0;i<requestSent.length;i++){ 
-           
-        %>
-        	<table>
-        	<tr>
-        		<td><h3><span class="label label-primary">sent to from:</span></h3></td>
-        		<td><h4><% out.print(requestSent[i].getApprover()); %></h4></td>
-        		<td><h4><% out.print(requestSent[i].isApproved()); %></h4></td>	
-        	</tr>
-        	</table>
-        <%}} %>
         <br>
-        <button type="submit" class="btn btn-primary"  name="submit" value="contact">Contact Advertiser</button>
+        <button type="submit" class="btn btn-primary"  name="submit" value="lookUp">Back to Home</button>
       </form>
     </div>
   </body>

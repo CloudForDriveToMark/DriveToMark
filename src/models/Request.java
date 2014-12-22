@@ -8,6 +8,8 @@ public class Request {
 	private long requestTime;
 	private long approveTime;
 	private String isApproved;
+	private int numberOfPeople;
+	private int advertisementId;
 	
 	
 	public Request() {
@@ -49,6 +51,19 @@ public class Request {
 	public void setApproved(String isApproved) {
 		this.isApproved = isApproved;
 	}
+	public int getNumberOfPeople() {
+		return numberOfPeople;
+	}
+	public void setNumberOfPeople(int numberOfPeople) {
+		this.numberOfPeople = numberOfPeople;
+	}
+	public int getAdvertisementId() {
+		return advertisementId;
+	}
+	public void setAdvertisementId(int advertisementId) {
+		this.advertisementId = advertisementId;
+	}
+	
 	
 	
 }

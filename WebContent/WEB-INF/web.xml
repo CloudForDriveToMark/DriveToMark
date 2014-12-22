@@ -99,4 +99,14 @@
     <servlet-name>DetailedAdvertisement</servlet-name>
     <url-pattern>/DetailedAdvertisement</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ViewStatus</display-name>
+    <servlet-name>ViewStatus</servlet-name>
+    <servlet-class>advertiseAndLookup.ViewStatus</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ViewStatus</servlet-name>
+    <url-pattern>/ViewStatus</url-pattern>
+  </servlet-mapping>
 </web-app>

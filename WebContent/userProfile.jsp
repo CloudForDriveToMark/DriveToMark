@@ -23,6 +23,17 @@
       out.print(request.getSession().getAttribute("name")); %></h1>
       <h2>What would you like you do today?</h2>
       <form role="form" method="post" action="UserProfile">
+      <% String status= request.getParameter("adv");
+      if( status != null){
+         	if( status.equals("n"))
+       		{ %>
+        		<font size="3" color="red">Oops! There was some problem while advertising.Try Again?</font>
+        	<%}
+        	else if(status.equals("y"))
+        	{ %>
+        		<font size="3" color="green">We have published your advertisement successfully</font>
+        	<% }
+        }%>
         <button type="submit" class="btn btn-primary" name="submit" value="advertise">Advertise Cars</button><br><br>
         <button type="submit" class="btn btn-primary" name="submit" value="lookUp">Lookup Cars</button><br><br>
         <button type="submit" class="btn btn-primary" name="submit" value="viewStatus">View Status</button><br><br>

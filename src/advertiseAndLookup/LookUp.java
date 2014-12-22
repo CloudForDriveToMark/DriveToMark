@@ -53,13 +53,14 @@ public class LookUp extends HttpServlet {
 		//load default map from user's city if it is from direct user profile
 		if (request.getParameter("submit").equals("filter")) {
 			// check which filters are applied
-			if(request.getParameter("startAddress")!=null){
+			if(request.getParameter("startAddress")!=null && !request.getParameter("startAddress").toString().equals("")){
 				startAddress = request.getParameter("startAddress");
+				System.out.println("inside start city");
 			}
-			if(request.getParameter("startZip")!=null){
+			if(request.getParameter("startZip")!=null && !request.getParameter("startZip").toString().equals("")){
 				startZip = request.getParameter("startZip");
 			}
-			if(request.getParameter("destinationAddress")!=null){
+			if(request.getParameter("destinationAddress")!=null && !request.getParameter("destinationAddress").toString().equals("")){
 				destinationAddress = request.getParameter("destinationAddress");
 			}
 			people = Integer.parseInt(request.getParameter("people"));

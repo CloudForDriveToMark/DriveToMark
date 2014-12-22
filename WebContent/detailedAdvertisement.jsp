@@ -14,6 +14,22 @@
 
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+function alertUser(){
+	alert("An email will be sent to advertise");
+}
+function validateForm(){
+	var seatRequested= document.check.seatsNeed.value;
+	var seatAvailable = document.check.seatAvailable.value;
+	if(seatRequested>seatAvailable){
+		alert("Seats available are less than you requested");
+		return false;
+	}else{
+		return true;
+	}
+
+}
+</script>
 <title>Advertise</title>
 
 </head>
@@ -21,12 +37,13 @@
 <jsp:include page="plainHeader.jsp"/>
 <div class="container">
       <h2>Details:</h2>
-      <form role="form" method="post" action="DetailedAdvertisement">
+      <form role="form" method="post" action="DetailedAdvertisement" name="check" onsubmit="return validateForm();" >
         <% Advertisement []advertisement = (models.Advertisement[])request.getSession().getAttribute("advertisementArray");
        		Employee []employeeArray = (models.Employee[])request.getSession().getAttribute("employeeArray");
         	int index = Integer.parseInt(request.getParameter("Id"));
         	request.getSession().setAttribute("employeeToContactEmail", employeeArray[index].getUserName());
         	request.getSession().setAttribute("employeeToContactName", employeeArray[index].getName());
+        	request.getSession().setAttribute("advertiseId", advertisement[index].getAdvertisementId());
         %>
         <table>
         <tr>
@@ -50,7 +67,7 @@
         	<td><h4><% out.print(advertisement[index].getCharge()); %></h4></td>
         </tr>
         <tr>
-        	<td><h3><span class="label label-primary">People:</span></h3></td>
+        	<td><h3><span class="label label-primary">People required:</span></h3></td>
         	<td><h4><% out.print(advertisement[index].getRequired()); %></h4></td>
         </tr>
         <tr>
@@ -75,10 +92,21 @@
         	<td><h3><span class="label label-primary">Message:</span></h3></td>
         	<td><h4><% out.print(advertisement[index].getMessage()); %></h4></td>
         </tr>
-       
+      
         </table>
+         <input type="hidden" id="seatAvailable" value="<%=advertisement[index].getRequired() %>">
+        <label for="startAddress">How many seats you need?</label>
+        	<select  name="seatsNeed" id="seatsNeed" required
+                data-bv-notempty-message="field required">
+   				 <option selected="selected" value="1">1 </option>
+    			 <option value="2">2</option>
+   			 	 <option value="3">3</option>
+    			 <option value="4">4</option>
+    			 <option value="5">5</option>
+			</select>
         <br>
-        <button type="submit" class="btn btn-primary"  name="submit" value="contact">Contact Advertiser</button>
+        
+        <button type="submit" class="btn btn-primary"  name="submit" value="contact">Send Request</button>
       </form>
     </div>
   </body>

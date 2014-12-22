@@ -64,7 +64,7 @@ public class SignUpProcess extends HttpServlet {
 			System.out.println("signUp successfull");
 			request.getSession().setAttribute("name", name);
 			request.getSession().setAttribute("userName",userName);
-			rd = request.getRequestDispatcher("userProfile.jsp");
+			rd = request.getRequestDispatcher("profileIndexAfterLogin.jsp");
 			rd.include(request, response);
 		}else{
 			rd = request.getRequestDispatcher("errorSignUp.jsp");

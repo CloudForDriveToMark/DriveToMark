@@ -36,10 +36,12 @@
      
       <form role="form" method="post" action="LookUp">
       
-           <label for="startAddress">Start City</label>
-          <input type="text" id="startAddress" name="startAddress" placeholder="e.g. Nyu Poly, NY">
+          <label for="startAddress">Start City</label>
+          <input type="text" id="startAddress" name="startAddress" required
+                data-bv-notempty-message="start city is required"  placeholder="e.g. Nyu Poly, NY">
           <label for="startZip">Start ZipCode</label>
-          <input type="text" id="startZip" name="startZip" placeholder="e.g. 11201">
+          <input type="text" id="startZip" name="startZip" required
+                data-bv-notempty-message="start zipcode is required" placeholder="e.g. 11201">
         
           <label for="distance">Distance Range</label>
          	 <select  name = "distance">
